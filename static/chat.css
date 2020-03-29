@@ -29,7 +29,7 @@
 
 .infobox {
   grid-area: infobox;
-  overflow: auto;
+  
 }
 
 .userlistbox {
