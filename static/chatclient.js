@@ -233,7 +233,8 @@ async function createPeerConnection() {
         urls: "turn:" + myHostname,  // A TURN server
         username: "webrtc",
         credential: "turnserver"
-      }, { "urls": "turn:numb.viagenie.ca", "username": "webrtc@live.com", "credential": "muazkh" }
+      },
+      { "urls": "turn:numb.viagenie.ca", "username": "webrtc@live.com", "credential": "muazkh" }
     ]
   });
 
@@ -245,6 +246,7 @@ async function createPeerConnection() {
   myPeerConnection.onsignalingstatechange = handleSignalingStateChangeEvent;
   myPeerConnection.onnegotiationneeded = handleNegotiationNeededEvent;
   myPeerConnection.ontrack = handleTrackEvent;
+  myPeerConnection.onaddstream = handleRemoteStreamEvent;
 }
 
 // Called by the WebRTC layer to let us know when it's time to
@@ -304,8 +306,20 @@ async function handleNegotiationNeededEvent() {
 function handleTrackEvent(event) {
   log("*** Track event");
   console.log(event);
-  document.getElementById("received_video").srcObject = event.streams[0];
+  var videoElement = document.getElementById("received_video");
+  videoElement.srcObject = event.streams[0];
+  videoElement.autoplay = true;
+  videoElement.playsInline = true;
+  videoElement.muted = true;
   document.getElementById("hangup-button").disabled = false;
+}
+function handleRemoteStreamEvent(event) {
+  log("*** Remote Stream event");
+  console.log(event);
+  var videoElement = document.getElementById("received_video");
+  videoElement.srcObject = event.stream;
+  videoElement.autoplay = true;
+
 }
 
 // Handles |icecandidate| events by forwarding the specified
@@ -436,6 +450,7 @@ function closeVideoCall() {
     if (localVideo.srcObject) {
       localVideo.pause();
       localVideo.srcObject.getTracks().forEach(track => {
+        log('stopping the track object')
         track.stop();
       });
     }
