@@ -112,16 +112,16 @@ function connect() {
   //connection = new WebSocket(serverUrl, "json");
   connection = new WebSocket(serverUrl);
 
-  connection.onopen = function(evt) {
+  connection.onopen = function (evt) {
     document.getElementById("text").disabled = false;
     document.getElementById("send").disabled = false;
   };
 
-  connection.onerror = function(evt) {
+  connection.onerror = function (evt) {
     console.dir(evt);
   }
 
-  connection.onmessage = function(evt) {
+  connection.onmessage = function (evt) {
     var chatBox = document.querySelector(".chatbox");
     var text = "";
     var msg = JSON.parse(evt.data);
@@ -130,7 +130,7 @@ function connect() {
     var time = new Date(msg.date);
     var timeStr = time.toLocaleTimeString();
 
-    switch(msg.type) {
+    switch (msg.type) {
       case "id":
         clientID = msg.id;
         setUsername();
@@ -233,7 +233,7 @@ async function createPeerConnection() {
         urls: "turn:" + myHostname,  // A TURN server
         username: "webrtc",
         credential: "turnserver"
-      }
+      }, { "urls": "turn:numb.viagenie.ca", "username": "webrtc@live.com", "credential": "muazkh" }
     ]
   });
 
@@ -281,7 +281,7 @@ async function handleNegotiationNeededEvent() {
       type: "video-offer",
       sdp: myPeerConnection.localDescription
     });
-  } catch(err) {
+  } catch (err) {
     log("*** The following error occurred while handling the negotiationneeded event:");
     reportError(err);
   };
@@ -303,6 +303,7 @@ async function handleNegotiationNeededEvent() {
 
 function handleTrackEvent(event) {
   log("*** Track event");
+  console.log(event);
   document.getElementById("received_video").srcObject = event.streams[0];
   document.getElementById("hangup-button").disabled = false;
 }
@@ -331,7 +332,7 @@ function handleICECandidateEvent(event) {
 function handleICEConnectionStateChangeEvent(event) {
   log("*** ICE connection state changed to " + myPeerConnection.iceConnectionState);
 
-  switch(myPeerConnection.iceConnectionState) {
+  switch (myPeerConnection.iceConnectionState) {
     case "closed":
     case "failed":
     case "disconnected":
@@ -349,7 +350,7 @@ function handleICEConnectionStateChangeEvent(event) {
 
 function handleSignalingStateChangeEvent(event) {
   log("*** WebRTC signaling state changed to: " + myPeerConnection.signalingState);
-  switch(myPeerConnection.signalingState) {
+  switch (myPeerConnection.signalingState) {
     case "closed":
       closeVideoCall();
       break;
@@ -388,7 +389,7 @@ function handleUserlistMsg(msg) {
 
   // Add member names from the received list.
 
-  msg.users.forEach(function(username) {
+  msg.users.forEach(function (username) {
     var item = document.createElement("li");
     item.appendChild(document.createTextNode(username));
     item.addEventListener("click", invite, false);
@@ -516,7 +517,7 @@ async function invite(evt) {
     try {
       webcamStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
       document.getElementById("local_video").srcObject = webcamStream;
-    } catch(err) {
+    } catch (err) {
       handleGetUserMediaError(err);
       return;
     }
@@ -525,9 +526,9 @@ async function invite(evt) {
 
     try {
       webcamStream.getTracks().forEach(
-        transceiver = track => myPeerConnection.addTransceiver(track, {streams: [webcamStream]})
+        transceiver = track => myPeerConnection.addTransceiver(track, { streams: [webcamStream] })
       );
-    } catch(err) {
+    } catch (err) {
       handleGetUserMediaError(err);
     }
   }
@@ -561,12 +562,12 @@ async function handleVideoOfferMsg(msg) {
     // Set the local and remove descriptions for rollback; don't proceed
     // until both return.
     await Promise.all([
-      myPeerConnection.setLocalDescription({type: "rollback"}),
+      myPeerConnection.setLocalDescription({ type: "rollback" }),
       myPeerConnection.setRemoteDescription(desc)
     ]);
     return;
   } else {
-    log ("  - Setting remote description");
+    log("  - Setting remote description");
     await myPeerConnection.setRemoteDescription(desc);
   }
 
@@ -575,7 +576,7 @@ async function handleVideoOfferMsg(msg) {
   if (!webcamStream) {
     try {
       webcamStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
-    } catch(err) {
+    } catch (err) {
       handleGetUserMediaError(err);
       return;
     }
@@ -586,9 +587,9 @@ async function handleVideoOfferMsg(msg) {
 
     try {
       webcamStream.getTracks().forEach(
-        transceiver = track => myPeerConnection.addTransceiver(track, {streams: [webcamStream]})
+        transceiver = track => myPeerConnection.addTransceiver(track, { streams: [webcamStream] })
       );
-    } catch(err) {
+    } catch (err) {
       handleGetUserMediaError(err);
     }
   }
@@ -628,7 +629,7 @@ async function handleNewICECandidateMsg(msg) {
   log("*** Adding received ICE candidate: " + JSON.stringify(candidate));
   try {
     await myPeerConnection.addIceCandidate(candidate)
-  } catch(err) {
+  } catch (err) {
     reportError(err);
   }
 }
@@ -642,10 +643,10 @@ async function handleNewICECandidateMsg(msg) {
 
 function handleGetUserMediaError(e) {
   log_error(e);
-  switch(e.name) {
+  switch (e.name) {
     case "NotFoundError":
       alert("Unable to open your call because no camera and/or microphone" +
-            "were found.");
+        "were found.");
       break;
     case "SecurityError":
     case "PermissionDeniedError":
