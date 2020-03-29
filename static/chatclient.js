@@ -537,12 +537,18 @@ async function invite(evt) {
       return;
     }
 
+
+    // myPeerConnection.addStream(webcamStream);
+
     // Add the tracks from the stream to the RTCPeerConnection
 
     try {
-      webcamStream.getTracks().forEach(
-        transceiver = track => myPeerConnection.addTransceiver(track, { streams: [webcamStream] })
-      );
+      webcamStream.getTracks().forEach(function (track) {
+        log('*** adding track via addTransceiver...')
+        console.log(track);
+        transceiver = myPeerConnection.addTransceiver(track, { streams: [webcamStream] })
+
+      });
     } catch (err) {
       handleGetUserMediaError(err);
     }
