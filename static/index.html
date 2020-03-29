@@ -16,8 +16,9 @@
 -->
 
 <html>
+
 <head>
-  <title>WebSocket Chat Demo with WebRTC Calling</title>
+  <title>Koala Chat</title>
   <meta charset="utf-8">
   <link href="./static/chat.css" rel="stylesheet">
   <link href="./static/shared.css" rel="stylesheet">
@@ -25,16 +26,19 @@
   <script type="text/javascript" src="./static/chatclient.js"></script>
   <script src="./static/adapter.js"></script>
 </head>
+
 <body>
   <div class="container">
     <div class="infobox">
       <h1>Koala Chat</h1>
       <p>Free Video chat
-      <p class="mdn-disclaimer">This text and audio/video chat example is offered as-is for demonstration purposes only, and should not be used for any other purpose.
-      </p>
-      <p>Click a username in the user list to ask them to enter a one-on-one video chat with you.</p>
-      <p>Enter a username: <input id="name" type="text" maxlength="12" required autocomplete="username" inputmode="verbatim" placeholder="Username">
-        <input type="button" name="login" value="Log in" onclick="connect()"></p>
+        <p class="mdn-disclaimer">This text and audio/video chat example is offered as-is for demonstration purposes
+          only, and should not be used for any other purpose.
+        </p>
+        <p>Click a username in the user list to ask them to enter a one-on-one video chat with you.</p>
+        <p>Enter a username: <input id="name" type="text" maxlength="12" required autocomplete="username"
+            inputmode="verbatim" placeholder="Username">
+          <input type="button" name="login" value="Log in" onclick="connect()"></p>
     </div>
     <ul class="userlistbox"></ul>
     <div class="chatbox"></div>
@@ -47,10 +51,12 @@
     </div>
     <div class="empty-container"></div>
     <div class="chat-controls">
-      Chat:<br/>
-      <input id="text" type="text" name="text" size="100" maxlength="256" placeholder="Say something meaningful..." autocomplete="off" onkeyup="handleKey(event)" disabled>
+      Chat:<br />
+      <input id="text" type="text" name="text" size="100" maxlength="256" placeholder="Say something meaningful..."
+        autocomplete="off" onkeyup="handleKey(event)" disabled>
       <input type="button" id="send" name="send" value="Send" onclick="handleSendButton()" disabled>
     </div>
   </div>
 </body>
+
 </html>
