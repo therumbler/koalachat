@@ -586,6 +586,6 @@
     }
     ready(init);
     function reportError(errMessage) {
-        logger.error(`Error ${errMessage.name}: ${errMessage.message}`);
+        console.error(`Error ${errMessage.name}: ${errMessage.message}`);
     }
 })();
