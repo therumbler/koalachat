@@ -169,6 +169,7 @@ class KoalaChat:
             return
         elif msg_type == "error":
             logger.error("Client error %s", msg)
+            send_to_clients = False
 
         if send_to_clients:
             if msg.get("target"):
