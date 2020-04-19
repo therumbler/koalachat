@@ -586,6 +586,12 @@
     }
     ready(init);
     function reportError(errMessage) {
-        console.error(`Error ${errMessage.name}: ${errMessage.message}`);
+        var loggedMsg = `Error ${errMessage.name}: ${errMessage.message}`;
+        console.error(loggedMsg);
+        var msg = {
+            type: 'error',
+            message: loggedMsg
+        }
+        sendToServer(msg);
     }
 })();
