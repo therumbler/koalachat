@@ -20,7 +20,7 @@
   min-width: 1250px;
   height: 100%;
   grid-template-areas: "infobox infobox infobox"
-  "userlistbox chatbox camerabox"
+  "camerabox"
   "empty-container chat-controls chat-controls";
   grid-template-columns: 10em 1fr 500px;
   grid-template-rows: 16em 1fr 5em;

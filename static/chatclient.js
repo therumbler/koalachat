@@ -78,20 +78,6 @@ function sendToServer(msg) {
   connection.send(msgJSON);
 }
 
-// Called when the "id" message is received; this message is sent by the
-// server to assign this login session a unique ID number; in response,
-// this function sends a "username" message to set our username for this
-// session.
-function setUsername() {
-  myUsername = document.getElementById("name").value;
-
-  sendToServer({
-    name: myUsername,
-    date: Date.now(),
-    id: clientID,
-    type: "username"
-  });
-}
 
 // Open and configure the connection to the WebSocket server.
 
@@ -105,16 +91,20 @@ function connect() {
   if (document.location.protocol === "https:") {
     scheme += "s";
   }
-  var wsHostname = 'alpha.irumble.com/koalachat/ws/'
-  serverUrl = scheme + "://" + wsHostname;
+  var wsHostname = myHostname;
+  console.log('wsHostname:', wsHostname);
+  if (wsHostname.match(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g)) {
+    wsHostname = wsHostname + ':11001'
+    console.log('ip address', wsHostname)
+  }
+  serverUrl = scheme + "://" + wsHostname + '/ws/';
 
   log(`Connecting to server: ${serverUrl}`);
   //connection = new WebSocket(serverUrl, "json");
   connection = new WebSocket(serverUrl);
 
   connection.onopen = function (evt) {
-    document.getElementById("text").disabled = false;
-    document.getElementById("send").disabled = false;
+    console.log('ws connection opened')
   };
 
   connection.onerror = function (evt) {
@@ -133,7 +123,6 @@ function connect() {
     switch (msg.type) {
       case "id":
         clientID = msg.id;
-        setUsername();
         break;
 
       case "username":
