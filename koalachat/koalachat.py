@@ -167,6 +167,8 @@ class KoalaChat:
         elif msg_type == "join":
             await self._handle_join(msg, client)
             return
+        elif msg_type == "error":
+            logger.error("Client error %s", msg)
 
         if send_to_clients:
             if msg.get("target"):
