@@ -418,7 +418,8 @@
         var webSocketAddress = scheme + '://' + hostname;
         if (port) {
             webSocketAddress = webSocketAddress + ':' + port;
-
+        } else {
+            webSocketAddress = webSocketAddress + '/koalachat';
         }
         webSocketAddress = webSocketAddress + '/ws/';
         console.log('webSocketAddress', webSocketAddress)
