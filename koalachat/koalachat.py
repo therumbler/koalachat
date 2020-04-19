@@ -101,6 +101,7 @@ class KoalaChat:
             await client.send_json(msg)
 
     async def send_to_one_user(self, msg):
+        logger.info("send to one user %s", msg["target"])
         target = msg["target"]
         for client in self.clients:
             if client.client_id == target:
