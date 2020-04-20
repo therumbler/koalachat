@@ -65,16 +65,18 @@ class KoalaChat:
     async def remove_client(self, websocket):
         for client in self.clients:
             if client.websocket.client_state == WebSocketState.DISCONNECTED:
+                client_id = client.id
                 logger.info("removing client...")
                 self.clients.remove(client)
-
+                for c in self.clients:
+                    await c.send_json({"type": "removed", "client_id": client_id})
         # await self.send_user_list()
 
     def _get_client(self, msg):
         if msg.get("client_id"):
             for client in self.clients:
                 if client.id == msg["client_id"]:
-                    logger.info("found client %s", client)
+                    logger.debug("found client %s", client)
                     return client
         else:
             # username?

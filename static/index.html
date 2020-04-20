@@ -24,16 +24,19 @@
     <div class="infobox">
       <h1>Koala Chat</h1>
       <p>Free Video chat</p>
+      <p id="client_id"></p>
       <input type="button" name="new" value="new" id="new"></p>
     </div>
-
-    <div class="camerabox">
-      <video id="received_video" autoplay></video>
-      <video id="local_video" autoplay muted></video>
+    <div>
       <button id="hangup-button" onclick="hangUpCall();" role="button" disabled>
         Hang Up
       </button>
     </div>
+    <div class="camerabox" id="camerabox">
+      <video id="local_video" autoplay muted></video>
+      <video id="received_video" autoplay></video>
+    </div>
+
 
   </div>
   <script src="./static/koalachat.js"></script>

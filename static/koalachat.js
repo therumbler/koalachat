@@ -135,7 +135,7 @@
             console.log("---> Sending the offer to the remote peer");
             sendToServer({
                 name: clientID,
-                targetClientID: targetClientID,
+                target: targetClientID,
                 type: "video-offer",
                 sdp: peerConnection.localDescription
             });
@@ -191,19 +191,28 @@
         console.log("*** Track event");
         console.log(event);
         var videoElement = document.getElementById("received_video");
+        // var videoElement = document.getElementById(event.track.id);
+        // if (!videoElement) {
+        //     videoElement = document.createElement('video');
+        // }
         videoElement.srcObject = event.streams[0];
         videoElement.autoplay = true;
         videoElement.playsInline = true;
         videoElement.muted = true;
+        videoElement.id = event.track.id;
         document.getElementById("hangup-button").disabled = false;
+        document.querySelector('#camerabox').appendChild(videoElement);
     }
     function handleRemoteStreamEvent(event) {
+        //deprecated
         console.log("*** Remote Stream event");
         console.log(event);
-        var videoElement = document.getElementById("received_video");
+        return;
+        // var videoElement = document.getElementById("received_video");
+        var videoElement = document.createElement('video');
         videoElement.srcObject = event.stream;
         videoElement.autoplay = true;
-
+        document.querySelector('#camerabox').appendChild(videoElement);
     }
 
     // Handles |icecandidate| events by forwarding the specified
@@ -427,7 +436,7 @@
     }
     var setupWebSocket = function () {
         var webSocketAddress = getWebSocketAddress();
-        connection = new WebSocket(webSocketAddress);
+        connection = new ReconnectingWebSocket(webSocketAddress);
         connection.onopen = function (evt) {
             console.log('ws connection opened')
         };
@@ -446,6 +455,7 @@
             switch (msg.type) {
                 case "id":
                     clientID = msg.id;
+                    document.querySelector('#client_id').innerHTML = msg.id;
                     if (chatId) {
                         console.log('chatId', chatId);
                         var msg = {
