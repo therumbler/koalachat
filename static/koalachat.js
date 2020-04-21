@@ -201,7 +201,7 @@
         videoElement.muted = true;
         videoElement.id = event.track.id;
         document.getElementById("hangup-button").disabled = false;
-        document.querySelector('#camerabox').appendChild(videoElement);
+        // document.querySelector('#camerabox').appendChild(videoElement);
     }
     function handleRemoteStreamEvent(event) {
         //deprecated
