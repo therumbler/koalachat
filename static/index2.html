@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Media Device Selector</title>
+    <style>
+        video {
+            background: #222;
+            margin: 0 0 20px 0;
+            --width: 100%;
+            width: var(--width);
+            height: calc(var(--width) * 0.75);
+        }
+    </style>
+</head>
+<div id="main"></div>
+
+<body>
+    <script>
+        (function () {
+            console.log('here');
+            var mediaConstraints = {
+                audio: true,            // We want an audio track
+                video: {
+                    aspectRatio: {
+                        ideal: 1.333333     // 3:2 aspect is preferred
+                    }
+                }
+            };
+            var setDevice = function (evt) {
+                console.log('setDevice');
+                var deviceId = evt.target.value;
+                var camId = evt.target.id;
+                console.log('deviceId', deviceId);
+                console.log('camId', camId);
+                const mediaConstraints = {
+                    audio: true,            // We want an audio track
+                    video: {
+                        deviceId: { exact: deviceId },
+                        aspectRatio: {
+                            ideal: 1.333333     // 3:2 aspect is preferred
+                        }
+                    }
+                };
+                console.log('mediaContstraints', mediaConstraints)
+                navigator.mediaDevices.getUserMedia(mediaConstraints).then(function (webcamStream) {
+                    document.getElementById('videoElement' + camId).srcObject = webcamStream;
+                });
+
+            }
+
+            var createCam = function (devices, camId) {
+                var videoElement = document.createElement('video');
+                videoElement.setAttribute('playsinline', '');
+                videoElement.setAttribute('autoplay', '');
+                videoElement.setAttribute('id', 'videoElement' + camId);
+                document.querySelector('#main').appendChild(videoElement);
+                var videoSelect = document.createElement('select');
+                videoSelect.addEventListener('change', setDevice);
+                videoSelect.setAttribute('id', camId);
+                devices.forEach(function (device) {
+                    if (device.kind !== 'videoinput') {
+                        return;
+                    }
+                    var option = document.createElement('option');
+                    option.text = device.label;
+                    option.value = device.deviceId;
+                    videoSelect.appendChild(option);
+                });
+                document.querySelector('#main').appendChild(videoSelect);
+            }
+            var gotDevices = function (devices) {
+                console.log('gotDevices');
+                createCam(devices, 'cam1');
+                createCam(devices, 'cam2');
+            }
+            var errorCallback = function (err) {
+                console.error(err);
+            }
+            navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(errorCallback);
+        })();
+    </script>
+</body>
+
+</html>
