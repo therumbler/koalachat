@@ -62,6 +62,7 @@
                     if (device.kind !== 'videoinput') {
                         return;
                     }
+                    console.log('video device = ', device)
                     var option = document.createElement('option');
                     option.text = device.label;
                     option.value = device.deviceId;
@@ -70,14 +71,18 @@
                 document.querySelector('#main').appendChild(videoSelect);
             }
             var gotDevices = function (devices) {
-                console.log('gotDevices');
+                console.log('gotDevices', devices);
                 createCam(devices, 'cam1');
                 createCam(devices, 'cam2');
             }
             var errorCallback = function (err) {
                 console.error(err);
             }
-            navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(errorCallback);
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function (webcamStream) {
+                console.log('init');
+                navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(errorCallback);
+            });
+
         })();
     </script>
 </body>
