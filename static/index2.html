@@ -58,6 +58,9 @@
                 var videoSelect = document.createElement('select');
                 videoSelect.addEventListener('change', setDevice);
                 videoSelect.setAttribute('id', camId);
+                var option = document.createElement('option');
+                option.text = '*** select a camera ***';
+                videoSelect.appendChild(option);
                 devices.forEach(function (device) {
                     if (device.kind !== 'videoinput') {
                         return;
